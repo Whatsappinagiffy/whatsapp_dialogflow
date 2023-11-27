@@ -280,6 +280,72 @@ def results():
     whatsapp_mobile_number = req['originalDetectIntentRequest']['payload']['AiSensyMobileNumber'][3:]
     whatsapp_customer_name = req['originalDetectIntentRequest']['payload']['AiSensyName']
         
+        
+    if intent_name == "Default Welcome Intent":
+        
+        date = datetime.datetime.now(tz).date().day
+        
+        if date>=6:
+            
+            cursor = db.First_Message.find({})
+            for c in cursor:
+                topic = c['Topic_Name']
+                url = c['Image_URL']
+                
+            cursor = db.Leader_Board.find().sort([('Score', -1), ('Time', 1)])   # 1 for ascending order, -1 for descending order
+            sorted_documents = list(cursor)
+
+            for rank, document in enumerate(sorted_documents, start=1):
+
+                db.Leader_Board.update_one({'_id': document['_id']}, {'$set': {'Rank': rank}})
+
+            cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
+            for c in cursor:
+                rank = c['Rank']
+
+            total_count = db.Leader_Board.count_documents({})
+            
+            cursor = db.Leader_Board.find({"Rank":1})
+            for c in cursor:
+                first_place = c['Name']
+                
+            cursor = db.Leader_Board.find({"Rank":2})
+            for c in cursor:
+                second_place = c['Name']
+                
+            cursor = db.Leader_Board.find({"Rank":3})
+            for c in cursor:
+                third_place = c['Name']
+            
+            if len(first_place)<1:
+                first_place = "Member"
+                
+            if len(second_place)<1:
+                second_place = "Member"
+                
+            if len(third_place)<1:
+                third_place = "Member"
+            
+            text = f"""Click ⬆ to read today's comic about Changing Times: *{topic}*
+
+Today you are #{rank}/{total_count}
+
+Who's leading this month? 👀
+🥇 1st Place: {first_place}
+🥈 2nd Place: {second_place}
+🥉 3rd Place: {third_place}
+
+Want to win prizes? 
+
+Play today's quiz and level up!"""
+            
+        subtitle = "IMAGE"
+        suggestions = ['Quiz Me','Tell Me More']
+        
+        return return_file_with_buttons(subtitle,text,url,suggestions)
+        
+        
+        
     if intent_name=="Quiz Me":
         context_session = re.findall("\'name\':\s\'(.*?)\/contexts",str(req))[0]+"/contexts"
         context_parameter_name = "correct_answer"
@@ -357,7 +423,7 @@ def results():
                 return return_only_text(text)
             
     if intent_name == "Check Rank":
-        cursor = db.Leader_Board.find().sort([('Time', 1), ('Score', 1)])  # 1 for ascending order, -1 for descending order
+        cursor = db.Leader_Board.find().sort([('Score', -1), ('Time', 1)])   # 1 for ascending order, -1 for descending order
         sorted_documents = list(cursor)
 
         for rank, document in enumerate(sorted_documents, start=1):
@@ -371,8 +437,20 @@ def results():
         total_count = db.Leader_Board.count_documents({})
         text = "Your rank is *#"+str(rank)+"/"+str(total_count)+"*"
         return return_only_text(text)
-            
     
+    if intent_name == "Tell Me More":
+        cursor = db.First_Message.find({})
+        for c in cursor:
+            text = c['Tell_Me_More']
+            
+        return return_text_and_suggestion_chip(text,['Additional Resources'])
+            
+    if intent_name == "Additional Resources":
+        cursor = db.First_Message.find({})
+        for c in cursor:
+            text = c['Additional_Resources']
+            
+        return return_only_text(text)
         
 @app.route('/api/', methods=['GET', 'POST'])
 def webhook():
