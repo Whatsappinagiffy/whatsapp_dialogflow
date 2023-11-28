@@ -267,6 +267,26 @@ def return_text_and_suggestion_chip(text,suggestions):
       }
     ]}
 
+def send_aisensy_template_message(template_name,destination,reciever_name,template_params,media_url):
+        url = "https://backend.aisensy.com/campaign/t1/api"
+
+        headers = {
+                    "Content-Type": "application/json"}
+
+        data = {
+          "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MzExZGI2ZWI4OGZkMWI0YjE0ZjdmMCIsIm5hbWUiOiJGaW5hbmNlIFdpdGggU2hhcmFuIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY1MWQ1N2QxYzk3YWQ2MGI1NWQ0NjE4OCIsImFjdGl2ZVBsYW4iOiJOT05FIiwiaWF0IjoxNjk3NzE3Njg3fQ.dCKR0o0EAB71P4bZUSR0169mc6OAxu6v7TSeZOfJmrI",
+          "campaignName": template_name,
+          "destination": destination,
+          "userName": reciever_name ,
+          "templateParams": template_params,
+          "media":{
+              "url":media_url,
+          "filename":"Image by Sharan"}
+        }
+
+        resp = requests.post(url, headers=headers, json=data)
+        
+
 
 def return_only_text(text):
     return {'fulfillmentMessages':[{"text":{"text":[text]}}]}
@@ -283,15 +303,89 @@ def results():
         
     if intent_name == "Default Welcome Intent":
         
-        date = datetime.datetime.now(tz).date().day
+#         date = datetime.datetime.now(tz).date().day
         
-        if date>=6:
+#         if date>=6:
             
-            cursor = db.First_Message.find({})
-            for c in cursor:
-                topic = c['Topic_Name'].strip()
-                url = c['Image_URL'].strip()
+#             cursor = db.First_Message.find({})
+#             for c in cursor:
+#                 topic = c['Topic_Name'].strip()
+#                 url = c['Image_URL'].strip()
                 
+#             cursor = db.Leader_Board.find().sort([('Score', -1), ('Time', 1)])   # 1 for ascending order, -1 for descending order
+#             sorted_documents = list(cursor)
+
+#             for rank, document in enumerate(sorted_documents, start=1):
+
+#                 db.Leader_Board.update_one({'_id': document['_id']}, {'$set': {'Rank': rank}})
+
+#             cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
+#             for c in cursor:
+#                 rank = c['Rank']
+
+#             total_count = db.Leader_Board.count_documents({})
+            
+#             cursor = db.Leader_Board.find({"Rank":1})
+#             for c in cursor:
+#                 first_place = c['Name'].strip()
+                
+#             cursor = db.Leader_Board.find({"Rank":2})
+#             for c in cursor:
+#                 second_place = c['Name'].strip()
+                
+#             cursor = db.Leader_Board.find({"Rank":3})
+#             for c in cursor:
+#                 third_place = c['Name'].strip()
+            
+#             if len(first_place)<1:
+#                 first_place = "Member"
+                
+#             if len(second_place)<1:
+#                 second_place = "Member"
+                
+#             if len(third_place)<1:
+#                 third_place = "Member"
+            
+#             text = f"""Click ⬆ to read today's comic about Changing Times: *{topic}*
+
+# Today you are #{rank}/{total_count}
+
+# Who's leading this month? 👀
+# 🥇 1st Place: {first_place}
+# 🥈 2nd Place: {second_place}
+# 🥉 3rd Place: {third_place}
+
+# Want to win prizes? 
+
+# Play today's quiz and level up!"""
+            
+#         subtitle = "IMAGE"
+#         suggestions = ['Quiz Me','Tell Me More']
+        
+#         return return_file_with_buttons(subtitle,text,url,suggestions)
+
+        date = datetime.datetime.now(tz).date().day
+
+
+
+        if date<=4:
+            template_name = "WhatsApp_Comic_Day"+str(date)
+        else:
+            template_name = "WhatsApp_Comic_Daily"
+
+        cursor = db.First_Message.find({})
+        for c in cursor:
+            topic = c['Topic_Name']
+            url = c['Image_URL']
+
+        name = whatsapp_customer_name
+        
+        if date<=4:
+            template_params_dict = {"WhatsApp_Comic_Day1":[topic],"WhatsApp_Comic_Day2":[topic],"WhatsApp_Comic_Day3":[topic],
+                           "WhatsApp_Comic_Day4":[topic],"WhatsApp_Comic_Daily":[topic,rank,total_count,first_place,second_place,third_place]}
+
+            send_aisensy_template_message(template_name,whatsapp_mobile_number,name,template_params,url)
+        else:
             cursor = db.Leader_Board.find().sort([('Score', -1), ('Time', 1)])   # 1 for ascending order, -1 for descending order
             sorted_documents = list(cursor)
 
@@ -301,48 +395,38 @@ def results():
 
             cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
             for c in cursor:
-                rank = c['Rank']
+                rank = str(c['Rank'])
 
-            total_count = db.Leader_Board.count_documents({})
-            
+            total_count = str(db.Leader_Board.count_documents({}))
+
             cursor = db.Leader_Board.find({"Rank":1})
             for c in cursor:
-                first_place = c['Name'].strip()
-                
+                first_place = c['Name']
+
             cursor = db.Leader_Board.find({"Rank":2})
             for c in cursor:
-                second_place = c['Name'].strip()
-                
+                second_place = c['Name']
+
             cursor = db.Leader_Board.find({"Rank":3})
             for c in cursor:
-                third_place = c['Name'].strip()
-            
+                third_place = c['Name']
+
             if len(first_place)<1:
                 first_place = "Member"
-                
+
             if len(second_place)<1:
                 second_place = "Member"
-                
+
             if len(third_place)<1:
                 third_place = "Member"
-            
-            text = f"""Click ⬆ to read today's comic about Changing Times: *{topic}*
 
-Today you are #{rank}/{total_count}
+            template_params_dict = {"WhatsApp_Comic_Day1":[topic],"WhatsApp_Comic_Day2":[topic],"WhatsApp_Comic_Day3":[topic],
+                           "WhatsApp_Comic_Day4":[topic],"WhatsApp_Comic_Daily":[topic.strip(),str(rank),total_count,first_place,second_place,third_place]}
 
-Who's leading this month? 👀
-🥇 1st Place: {first_place}
-🥈 2nd Place: {second_place}
-🥉 3rd Place: {third_place}
 
-Want to win prizes? 
+            template_params = template_params_dict[template_name]
 
-Play today's quiz and level up!"""
-            
-        subtitle = "IMAGE"
-        suggestions = ['Quiz Me','Tell Me More']
-        
-        return return_file_with_buttons(subtitle,text,url,suggestions)
+            send_aisensy_template_message(template_name,whatsapp_mobile_number,name,template_params,url)
         
         
         
