@@ -400,7 +400,7 @@ Play today's quiz and level up!"""
                                 }
                             )
                 
-                    return return_only_text("That's correct. Your updated Score is *"+str(score+1))+"*"
+                    return return_only_text("That's correct. Your updated Score is *"+str(score+1)+"*")
                 
                 else:
                     hours = datetime.datetime.now(tz).hour
