@@ -400,7 +400,7 @@ Play today's quiz and level up!"""
                                 }
                             )
                 
-                    return return_only_text("Thank you for participating. Updated Score in "+str(score+1))
+                    return return_only_text("That's correct. Your updated Score is *"+str(score+1))+"*"
                 
                 else:
                     hours = datetime.datetime.now(tz).hour
@@ -416,7 +416,7 @@ Play today's quiz and level up!"""
                     "Time":str(new_time)
                     })
                     
-                    return return_only_text("Thank you for participating.")
+                    return return_only_text("That's correct. Thank you for participating.")
                 
             else:
                 text = "Opps! Incorrect answer"
