@@ -289,8 +289,8 @@ def results():
             
             cursor = db.First_Message.find({})
             for c in cursor:
-                topic = c['Topic_Name']
-                url = c['Image_URL']
+                topic = c['Topic_Name'].strip()
+                url = c['Image_URL'].strip()
                 
             cursor = db.Leader_Board.find().sort([('Score', -1), ('Time', 1)])   # 1 for ascending order, -1 for descending order
             sorted_documents = list(cursor)
@@ -307,15 +307,15 @@ def results():
             
             cursor = db.Leader_Board.find({"Rank":1})
             for c in cursor:
-                first_place = c['Name']
+                first_place = c['Name'].strip()
                 
             cursor = db.Leader_Board.find({"Rank":2})
             for c in cursor:
-                second_place = c['Name']
+                second_place = c['Name'].strip()
                 
             cursor = db.Leader_Board.find({"Rank":3})
             for c in cursor:
-                third_place = c['Name']
+                third_place = c['Name'].strip()
             
             if len(first_place)<1:
                 first_place = "Member"
@@ -368,11 +368,11 @@ Play today's quiz and level up!"""
             answer = req['queryResult']['parameters']['quiz_answer']
             cursor = db.Quiz_Question.find({})
             for c in cursor:
-                text = c['Quiz_Question']
-                Button1 = c['Button1']
-                Button2 = c['Button2']
-                Button3 = c['Button3']
-                correct_answer = c['Correct_Answer']
+                text = c['Quiz_Question'].strip()
+                Button1 = c['Button1'].strip()
+                Button2 = c['Button2'].strip()
+                Button3 = c['Button3'].strip()
+                correct_answer = c['Correct_Answer'].strip()
                 
             if answer == req['queryResult']['outputContexts'][0]['parameters']['correct_answer']:
                 if db.Leader_Board.count_documents({"Mobile Number":str(whatsapp_mobile_number)})>0:
