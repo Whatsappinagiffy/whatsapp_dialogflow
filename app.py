@@ -382,7 +382,7 @@ def results():
         
         if date<=4:
             template_params_dict = {"WhatsApp_Comic_Day1":[topic],"WhatsApp_Comic_Day2":[topic],"WhatsApp_Comic_Day3":[topic],
-                           "WhatsApp_Comic_Day4":[topic],"WhatsApp_Comic_Daily":[topic,rank,total_count,first_place,second_place,third_place]}
+                           "WhatsApp_Comic_Day4":[topic],"WhatsApp_Comic_Daily_New":[topic,rank,total_count,first_place,second_place,third_place]}
 
             send_aisensy_template_message(template_name,whatsapp_mobile_number,name,template_params,url)
         else:
