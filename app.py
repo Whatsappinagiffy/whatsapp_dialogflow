@@ -421,7 +421,7 @@ def results():
                 third_place = "Member"
 
             template_params_dict = {"WhatsApp_Comic_Day1":[topic],"WhatsApp_Comic_Day2":[topic],"WhatsApp_Comic_Day3":[topic],
-                           "WhatsApp_Comic_Day4":[topic],"WhatsApp_Comic_Daily":[topic.strip(),str(rank),total_count,first_place,second_place,third_place]}
+                           "WhatsApp_Comic_Day4":[topic],"WhatsApp_Comic_Daily_New":[topic.strip(),str(rank),total_count,first_place,second_place,third_place]}
 
 
             template_params = template_params_dict[template_name]
