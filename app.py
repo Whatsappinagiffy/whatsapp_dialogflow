@@ -371,7 +371,7 @@ def results():
         if date<=4:
             template_name = "WhatsApp_Comic_Day"+str(date)
         else:
-            template_name = "WhatsApp_Comic_Daily"
+            template_name = "WhatsApp_Comic_Daily_New"
 
         cursor = db.First_Message.find({})
         for c in cursor:
