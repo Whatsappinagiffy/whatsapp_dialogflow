@@ -382,8 +382,9 @@ def results():
         
         if date<=4:
             template_params_dict = {"WhatsApp_Comic_Day1":[topic],"WhatsApp_Comic_Day2":[topic],"WhatsApp_Comic_Day3":[topic],
-                           "WhatsApp_Comic_Day4":[topic],"WhatsApp_Comic_Daily_New":[topic,rank,total_count,first_place,second_place,third_place]}
+                           "WhatsApp_Comic_Day4":[topic]}
 
+            template_params = template_params_dict[template_name]
             send_aisensy_template_message(template_name,whatsapp_mobile_number,name,template_params,url)
         else:
             cursor = db.Leader_Board.find().sort([('Score', -1), ('Time', 1)])   # 1 for ascending order, -1 for descending order
