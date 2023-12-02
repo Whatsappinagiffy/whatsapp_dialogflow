@@ -460,6 +460,7 @@ def results():
             return return_text_and_suggestion_chip_with_context(text,suggestions,context_session,context_parameter_name,context_value)
         
         else:
+            date = datetime.datetime.now(tz).date().day
             answer = req['queryResult']['parameters']['quiz_answer']
             cursor = db.Quiz_Question.find({})
             for c in cursor:
@@ -476,6 +477,10 @@ def results():
                         score = int(c['Score'])
                         time = float(c['Time'])
                         
+                    if score>=date:
+                        score = score
+                    else:
+                        score = score +1
                     hours = datetime.datetime.now(tz).hour
                     minutes = datetime.datetime.now(tz).minute
                     seconds = datetime.datetime.now(tz).second
@@ -489,7 +494,7 @@ def results():
                                 {
                                     "$set" :
                                     {
-                                        "Score" : int(score+1),
+                                        "Score" : int(score),
                                         "Time":float(time+new_time)
                                     }
                                 }
