@@ -387,12 +387,22 @@ def results():
             template_params = template_params_dict[template_name]
             send_aisensy_template_message(template_name,whatsapp_mobile_number,name,template_params,url)
         else:
-            cursor = db.Leader_Board.find().sort([('Score', -1), ('Time', 1)])   # 1 for ascending order, -1 for descending order
-            sorted_documents = list(cursor)
+            sort_fields = [('Score', -1), ('Time', -1)]  # Example fields and directions
 
-            for rank, document in enumerate(sorted_documents, start=1):
+            # Get the sorted documents without modifying the original collection
+            sorted_documents = list(db.Leader_Board.find().sort(sort_fields))
 
-                db.Leader_Board.update_one({'_id': document['_id']}, {'$set': {'Rank': rank}})
+            # Use update_many to set the 'rank' field for all documents
+            bulk_updates = [
+                UpdateOne(
+                    {'_id': document['_id']},
+                    {'$set': {'Rank': index+1}}
+                )
+                for index, document in enumerate(sorted_documents)
+            ]
+
+            # Update many documents in a single operation
+            db.Leader_Board.bulk_write(bulk_updates)
 
             cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
             for c in cursor:
@@ -479,8 +489,8 @@ def results():
                                 {
                                     "$set" :
                                     {
-                                        "Score" : str(score+1),
-                                        "Time":str(time+new_time)
+                                        "Score" : int(score+1),
+                                        "Time":float(time+new_time)
                                     }
                                 }
                             )
@@ -497,8 +507,8 @@ def results():
                     db.Leader_Board.insert_one({
                     "Mobile Number":whatsapp_mobile_number,
                     "Name":whatsapp_customer_name,
-                    "Score":str(1),
-                    "Time":str(new_time)
+                    "Score":int(1),
+                    "Time":float(new_time)
                     })
                     
                     return return_only_text("Great job! That's the right answer.")
