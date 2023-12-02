@@ -387,7 +387,7 @@ def results():
             template_params = template_params_dict[template_name]
             send_aisensy_template_message(template_name,whatsapp_mobile_number,name,template_params,url)
         else:
-            sort_fields = [('Score', -1), ('Time', -1)]  # Example fields and directions
+            sort_fields = [('Score', -1), ('Time', 1)]  # Example fields and directions
 
             # Get the sorted documents without modifying the original collection
             sorted_documents = list(db.Leader_Board.find().sort(sort_fields))
