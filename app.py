@@ -519,7 +519,7 @@ def results():
                     return return_only_text("Great job! That's the right answer.")
                 
             else:
-                text = "That's not the right answer, better luck next time!"
+                text = "That's not the right answer, better luck next time! The correct answer is "+correct_answer
                 return return_only_text(text)
             
     if intent_name == "Check Rank":
