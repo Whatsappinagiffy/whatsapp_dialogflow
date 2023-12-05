@@ -408,7 +408,7 @@ def results():
             for c in cursor:
                 rank = str(c['Rank'])
 
-            total_count = str(db.Users.count_documents({}))
+            total_count = str(db.Users.count_documents({"Status":"ACTIVE","Merchant_ID":"1"}))
 
             cursor = db.Leader_Board.find({"Rank":1})
             for c in cursor:
