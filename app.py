@@ -2,7 +2,7 @@ from flask import Flask,request,make_response,jsonify
 import requests
 import certifi
 import json
-from pymongo import MongoClient
+from pymongo import MongoClient,UpdateOne
 import pymongo
 import re
 import datetime
@@ -408,7 +408,7 @@ def results():
             for c in cursor:
                 rank = str(c['Rank'])
 
-            total_count = str(db.Leader_Board.count_documents({}))
+            total_count = str(db.Users.count_documents({}))
 
             cursor = db.Leader_Board.find({"Rank":1})
             for c in cursor:
