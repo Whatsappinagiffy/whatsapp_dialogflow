@@ -564,6 +564,9 @@ def results_insert_data():
         merchant_app_id = req['merchant_app_id']
         updated_at = req['updated_at']
         created_at = req['created_at']
+        types = req['type']
+        user_id = req['user_id']
+
 
         db.Users.insert_one({"ID":str(ids).strip().lower(),
                     "Mobile":str(mobile).strip(),
@@ -574,6 +577,14 @@ def results_insert_data():
                     "Merchant_App_ID":str(merchant_app_id).strip(),
                     "Updated_At":str(updated_at).strip(),
                     "Created_At":str(created_at).strip()})
+
+        db.User_Config.insert_one({
+                "ID":str(ids).strip().lower(),
+                "Updated_At":str(updated_at).strip(),
+                "Type":str(types).strip(),
+                "Status":str(status).strip(),
+                "User_ID":str(user_id).strip(),
+                "Created_At":str(created_at).strip()})
 
         return {"Response":"Success"}
     
