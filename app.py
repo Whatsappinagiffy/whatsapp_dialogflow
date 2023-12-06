@@ -551,11 +551,45 @@ def results():
             text = c['Additional_Resources']
             
         return return_only_text(text)
+    
+def results_insert_data():
+    try:
+        req = request.get_json(force=True)
+        ids = req['id']
+        mobile = req['mobile']
+        status = req['status']
+        name = req['name']
+        email = req['email']
+        merchant_id = req['merchant_id']
+        merchant_app_id = req['merchant_app_id']
+        updated_at = req['updated_at']
+        created_at = req['created_at']
+
+        db.Users.insert_one({"ID":str(ids).strip().lower(),
+                    "Mobile":str(mobile).strip(),
+                    "Status":str(status).strip(),
+                    "Name":str(name).strip(),
+                    "Email":str(email).strip(),
+                    "Merchant_ID":str(merchant_id).strip(),
+                    "Merchant_App_ID":str(merchant_app_id).strip(),
+                    "Updated_At":str(updated_at).strip(),
+                    "Created_At":str(created_at).strip()})
+
+        return {"Response":"Success"}
+    
+    except:
+        return {"Response":"Error Occurred"}
         
 @app.route('/api/', methods=['GET', 'POST'])
 def webhook():
     # return response
     return make_response(jsonify(results()))
+
+
+@app.route('/insert_data/', methods=['GET', 'POST'])
+def webhook_insert_data():
+    # return response
+    return make_response(jsonify(results_insert_data()))
 
 
 if __name__ == '__main__':
