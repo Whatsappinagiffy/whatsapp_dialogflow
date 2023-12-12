@@ -408,7 +408,7 @@ def results():
             for c in cursor:
                 rank = str(c['Rank'])
 
-            total_count = str(db.Users.count_documents({"Status":"ACTIVE","Merchant_ID":"1"}))
+            total_count = str(db.Users.count_documents({"Status":"ACTIVE"}))
 
             cursor = db.Leader_Board.find({"Rank":1})
             for c in cursor:
@@ -555,36 +555,21 @@ def results():
 def results_insert_data():
     try:
         req = request.get_json(force=True)
-        ids = req['id']
         mobile = req['mobile']
         status = req['status']
         name = req['name']
         email = req['email']
-        merchant_id = req['merchant_id']
-        merchant_app_id = req['merchant_app_id']
-        updated_at = req['updated_at']
-        created_at = req['created_at']
-        types = req['type']
-        user_id = req['user_id']
+        updated_at = datetime.datetime.now(tz).ctime()
+        created_at = datetime.datetime.now(tz).ctime()
 
 
-        db.Users.insert_one({"ID":str(ids).strip().lower(),
+        db.Users.insert_one({
                     "Mobile":str(mobile).strip(),
                     "Status":str(status).strip(),
                     "Name":str(name).strip(),
                     "Email":str(email).strip(),
-                    "Merchant_ID":str(merchant_id).strip(),
-                    "Merchant_App_ID":str(merchant_app_id).strip(),
                     "Updated_At":str(updated_at).strip(),
                     "Created_At":str(created_at).strip()})
-
-        db.User_Config.insert_one({
-                "ID":str(ids).strip().lower(),
-                "Updated_At":str(updated_at).strip(),
-                "Type":str(types).strip(),
-                "Status":str(status).strip(),
-                "User_ID":str(user_id).strip(),
-                "Created_At":str(created_at).strip()})
 
         return {"Response":"Success"}
     
