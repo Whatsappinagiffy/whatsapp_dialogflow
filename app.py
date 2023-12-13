@@ -306,8 +306,6 @@ def results():
 
         date = datetime.datetime.now(tz).date().day
 
-
-
         if date<=4:
             template_name = "WhatsApp_Comic_Day"+str(date)
         else:
@@ -327,22 +325,11 @@ def results():
             template_params = template_params_dict[template_name]
             send_aisensy_template_message(template_name,whatsapp_mobile_number,name,template_params,url)
         else:
-#             sort_fields = [('Score', -1), ('Time', 1)]  # Example fields and directions
 
-#             # Get the sorted documents without modifying the original collection
-#             sorted_documents = list(db.Leader_Board.find().sort(sort_fields))
-
-#             # Use update_many to set the 'rank' field for all documents
-#             bulk_updates = [
-#                 UpdateOne(
-#                     {'_id': document['_id']},
-#                     {'$set': {'Rank': index+1}}
-#                 )
-#                 for index, document in enumerate(sorted_documents)
-#             ]
-
-#             # Update many documents in a single operation
-#             db.Leader_Board.bulk_write(bulk_updates)
+            first_place = 'Member'
+            second_place = 'Member'
+            third_place = 'Member'
+            
             rank = 'NA'
             cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
             for c in cursor:
@@ -361,15 +348,6 @@ def results():
             cursor = db.Leader_Board.find({"Rank":3})
             for c in cursor:
                 third_place = c['Name']
-
-            if len(first_place)<1:
-                first_place = "Member"
-
-            if len(second_place)<1:
-                second_place = "Member"
-
-            if len(third_place)<1:
-                third_place = "Member"
 
             template_params_dict = {"WhatsApp_Comic_Day1":[topic],"WhatsApp_Comic_Day2":[topic],"WhatsApp_Comic_Day3":[topic],
                            "WhatsApp_Comic_Day4":[topic],"WhatsApp_Comic_Daily_New":[topic.strip(),str(rank),total_count,first_place,second_place,third_place]}
