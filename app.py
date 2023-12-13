@@ -303,67 +303,6 @@ def results():
         
         
     if intent_name == "Default Welcome Intent":
-        
-#         date = datetime.datetime.now(tz).date().day
-        
-#         if date>=6:
-            
-#             cursor = db.First_Message.find({})
-#             for c in cursor:
-#                 topic = c['Topic_Name'].strip()
-#                 url = c['Image_URL'].strip()
-                
-#             cursor = db.Leader_Board.find().sort([('Score', -1), ('Time', 1)])   # 1 for ascending order, -1 for descending order
-#             sorted_documents = list(cursor)
-
-#             for rank, document in enumerate(sorted_documents, start=1):
-
-#                 db.Leader_Board.update_one({'_id': document['_id']}, {'$set': {'Rank': rank}})
-
-#             cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
-#             for c in cursor:
-#                 rank = c['Rank']
-
-#             total_count = db.Leader_Board.count_documents({})
-            
-#             cursor = db.Leader_Board.find({"Rank":1})
-#             for c in cursor:
-#                 first_place = c['Name'].strip()
-                
-#             cursor = db.Leader_Board.find({"Rank":2})
-#             for c in cursor:
-#                 second_place = c['Name'].strip()
-                
-#             cursor = db.Leader_Board.find({"Rank":3})
-#             for c in cursor:
-#                 third_place = c['Name'].strip()
-            
-#             if len(first_place)<1:
-#                 first_place = "Member"
-                
-#             if len(second_place)<1:
-#                 second_place = "Member"
-                
-#             if len(third_place)<1:
-#                 third_place = "Member"
-            
-#             text = f"""Click ⬆ to read today's comic about Changing Times: *{topic}*
-
-# Today you are #{rank}/{total_count}
-
-# Who's leading this month? 👀
-# 🥇 1st Place: {first_place}
-# 🥈 2nd Place: {second_place}
-# 🥉 3rd Place: {third_place}
-
-# Want to win prizes? 
-
-# Play today's quiz and level up!"""
-            
-#         subtitle = "IMAGE"
-#         suggestions = ['Quiz Me','Tell Me More']
-        
-#         return return_file_with_buttons(subtitle,text,url,suggestions)
 
         date = datetime.datetime.now(tz).date().day
 
@@ -388,23 +327,23 @@ def results():
             template_params = template_params_dict[template_name]
             send_aisensy_template_message(template_name,whatsapp_mobile_number,name,template_params,url)
         else:
-            sort_fields = [('Score', -1), ('Time', 1)]  # Example fields and directions
+#             sort_fields = [('Score', -1), ('Time', 1)]  # Example fields and directions
 
-            # Get the sorted documents without modifying the original collection
-            sorted_documents = list(db.Leader_Board.find().sort(sort_fields))
+#             # Get the sorted documents without modifying the original collection
+#             sorted_documents = list(db.Leader_Board.find().sort(sort_fields))
 
-            # Use update_many to set the 'rank' field for all documents
-            bulk_updates = [
-                UpdateOne(
-                    {'_id': document['_id']},
-                    {'$set': {'Rank': index+1}}
-                )
-                for index, document in enumerate(sorted_documents)
-            ]
+#             # Use update_many to set the 'rank' field for all documents
+#             bulk_updates = [
+#                 UpdateOne(
+#                     {'_id': document['_id']},
+#                     {'$set': {'Rank': index+1}}
+#                 )
+#                 for index, document in enumerate(sorted_documents)
+#             ]
 
-            # Update many documents in a single operation
-            db.Leader_Board.bulk_write(bulk_updates)
-
+#             # Update many documents in a single operation
+#             db.Leader_Board.bulk_write(bulk_updates)
+            rank = 'NA'
             cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
             for c in cursor:
                 rank = str(c['Rank'])
