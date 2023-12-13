@@ -297,7 +297,8 @@ def results():
     #print(req)
     
     intent_name = req['queryResult']['intent']['displayName']
-    whatsapp_mobile_number = req['originalDetectIntentRequest']['payload']['AiSensyMobileNumber'][3:]
+    whatsapp_mobile_number = req['originalDetectIntentRequest']['payload']['AiSensyMobileNumber']
+    whatsapp_mobile_number = re.sub('[^0-9]','',whatsapp_mobile_number)
     whatsapp_customer_name = req['originalDetectIntentRequest']['payload']['AiSensyName']
         
         
