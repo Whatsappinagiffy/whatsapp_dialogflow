@@ -4,6 +4,7 @@ import certifi
 import json
 from pymongo import MongoClient,UpdateOne
 import pymongo
+import random
 import re
 import datetime
 import pytz
@@ -330,7 +331,7 @@ def results():
             second_place = 'Member'
             third_place = 'Member'
             
-            rank = 'NA'
+            rank = str(random.randint(2000,3000))
             cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
             for c in cursor:
                 rank = str(c['Rank'])
