@@ -334,7 +334,10 @@ def results():
             rank = str(random.randint(2000,3000))
             cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
             for c in cursor:
-                rank = str(c['Rank'])
+                try:
+                    rank = str(c['Rank'])
+                except:
+                    rank = "NA"
 
             total_count = str(db.Users.count_documents({"Status":"ACTIVE"}))
 
