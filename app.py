@@ -331,7 +331,7 @@ def results():
             second_place = 'Member'
             third_place = 'Member'
             
-            rank = str(random.randint(2000,3000))
+            rank = "NA"
             cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
             for c in cursor:
                 try:
