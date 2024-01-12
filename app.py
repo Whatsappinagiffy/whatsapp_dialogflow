@@ -300,6 +300,7 @@ def results():
     intent_name = req['queryResult']['intent']['displayName']
     whatsapp_mobile_number = req['originalDetectIntentRequest']['payload']['AiSensyMobileNumber']
     whatsapp_mobile_number = re.sub('[^0-9]','',whatsapp_mobile_number)
+    whatsapp_mobile_number = "+"+whatsapp_mobile_number
     whatsapp_customer_name = req['originalDetectIntentRequest']['payload']['AiSensyName']
         
         
@@ -332,7 +333,7 @@ def results():
             third_place = 'Member'
             
             rank = "NA"
-            cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
+            cursor = db.Leader_Board.find({"Mobile":whatsapp_mobile_number})
             for c in cursor:
                 try:
                     rank = str(c['Rank'])
@@ -393,8 +394,8 @@ def results():
                 correct_answer = c['Correct_Answer'].strip()
                 
             if answer == req['queryResult']['outputContexts'][0]['parameters']['correct_answer']:
-                if db.Leader_Board.count_documents({"Mobile Number":str(whatsapp_mobile_number)})>0:
-                    cursor = db.Leader_Board.find({"Mobile Number":str(whatsapp_mobile_number)})
+                if db.Leader_Board.count_documents({"Mobile":str(whatsapp_mobile_number)})>0:
+                    cursor = db.Leader_Board.find({"Mobile":str(whatsapp_mobile_number)})
                     for c in cursor:
                         score = int(c['Score'])
                         time = float(c['Time'])
@@ -411,7 +412,7 @@ def results():
                         
                     db.Leader_Board.update_one(
                                 {
-                                    "Mobile Number" : whatsapp_mobile_number
+                                    "Mobile" : whatsapp_mobile_number
                                 },
                                 {
                                     "$set" :
@@ -432,7 +433,7 @@ def results():
                     new_time = (hours*60)+minutes+(seconds/60)
                     
                     db.Leader_Board.insert_one({
-                    "Mobile Number":whatsapp_mobile_number,
+                    "Mobile":whatsapp_mobile_number,
                     "Name":whatsapp_customer_name,
                     "Score":int(1),
                     "Time":float(new_time)
@@ -452,7 +453,7 @@ def results():
 
             db.Leader_Board.update_one({'_id': document['_id']}, {'$set': {'Rank': rank}})
             
-        cursor = db.Leader_Board.find({"Mobile Number":whatsapp_mobile_number})
+        cursor = db.Leader_Board.find({"Mobile":whatsapp_mobile_number})
         for c in cursor:
             rank = c['Rank']
             
