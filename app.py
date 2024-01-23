@@ -478,8 +478,9 @@ def results():
 def results_insert_data():
     try:
         req = request.get_json(force=True)
-        mobile = req['mobile']
-        status = req['status']
+        print(req)
+        mobile = "+"+str(req['mobile'])
+        status = "ACTIVE"
         name = req['name']
         email = req['email']
         updated_at = datetime.datetime.now(tz).ctime()
