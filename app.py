@@ -268,6 +268,55 @@ def return_text_and_suggestion_chip(text,suggestions):
       }
     ]}
 
+def return_text_two_messages(text1,text2,suggestions):
+    suggestion_list = []
+    for suggestion in suggestions:
+        suggestion_list.append({"title":suggestion})
+    return {"fulfillmentMessages": [
+      {
+        "platform": "ACTIONS_ON_GOOGLE",
+        "simpleResponses": {
+          "simpleResponses": [
+            {
+              "textToSpeech": text1
+            }
+          ]
+        }
+      },
+      {
+        "platform": "ACTIONS_ON_GOOGLE",
+        "simpleResponses": {
+          "simpleResponses": [
+            {
+              "textToSpeech": text2
+            }
+          ]
+        }
+      },
+      {
+        "platform": "ACTIONS_ON_GOOGLE",
+        "suggestions": {
+          "suggestions": suggestion_list
+        }
+      },
+      {
+        "text": {
+          "text": [
+            text1
+          ]
+        }
+      },
+      {
+        "text": {
+          "text": [
+            text2
+          ]
+        }
+      }
+    ]}
+
+    
+
 def send_aisensy_template_message(template_name,destination,reciever_name,template_params,media_url):
         url = "https://backend.aisensy.com/campaign/t1/api"
 
@@ -466,6 +515,12 @@ def results():
         for c in cursor:
             text = c['Tell_Me_More']
             
+        if len(text)>1000:
+            text1 = text[:1000]
+            text2 = text[1000:]
+            
+            return return_text_two_messages(text1,text2,['Additional Resources'])
+            
         return return_text_and_suggestion_chip(text,['Additional Resources'])
             
     if intent_name == "Additional Resources":
@@ -478,7 +533,6 @@ def results():
 def results_insert_data():
     try:
         req = request.get_json(force=True)
-        print(req)
         mobile = "+"+str(req['mobile'])
         status = "ACTIVE"
         name = req['name']
