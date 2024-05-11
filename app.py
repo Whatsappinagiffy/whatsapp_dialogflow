@@ -15,6 +15,8 @@ ca = certifi.where()
 client = pymongo.MongoClient('mongodb+srv://whatsapp:v1prkDHjYLtrcB3C@cluster0.yclbutx.mongodb.net/?retryWrites=true&w=majority', tlsCAFile=ca)
 db = client.WhatsApp_DB
 
+api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YmQwMTg2NWM5ZjRhMGI0NjIwOTliYyIsIm5hbWUiOiJUaGUgMSUgQ2x1YiB2MiIsImFwcE5hbWUiOiJBaVNlbnN5IiwiY2xpZW50SWQiOiI2NTFkNTdkMWM5N2FkNjBiNTVkNDYxODgiLCJhY3RpdmVQbGFuIjoiTk9ORSIsImlhdCI6MTcwNjg4NTUxMH0.JJvVtqldtl4NNV4N-0Oqtj4xIC5P_z7p-f6AYn-ORSQ"
+
 
 app = Flask(__name__)
 
@@ -324,7 +326,7 @@ def send_aisensy_template_message(template_name,destination,reciever_name,templa
                     "Content-Type": "application/json"}
 
         data = {
-          "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MzExZGI2ZWI4OGZkMWI0YjE0ZjdmMCIsIm5hbWUiOiJGaW5hbmNlIFdpdGggU2hhcmFuIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY1MWQ1N2QxYzk3YWQ2MGI1NWQ0NjE4OCIsImFjdGl2ZVBsYW4iOiJOT05FIiwiaWF0IjoxNjk3NzE3Njg3fQ.dCKR0o0EAB71P4bZUSR0169mc6OAxu6v7TSeZOfJmrI",
+          "apiKey": api_key,
           "campaignName": template_name,
           "destination": destination,
           "userName": reciever_name ,
